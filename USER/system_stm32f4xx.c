@@ -491,12 +491,13 @@ void SystemInit(void)
   * @param  None
   * @retval None
   */
+ #include <stdio.h>
 void SystemCoreClockUpdate(void)
 {
   uint32_t tmp = 0, pllvco = 0, pllp = 2, pllsource = 0, pllm = 2;
-  
+
   /* Get SYSCLK source -------------------------------------------------------*/
-  tmp = RCC->CFGR & RCC_CFGR_SWS;
+  tmp = RCC->CFGR & RCC_CFGR_SWS; //tem == 0x08 选择 PLL 作为系统时钟
 
   switch (tmp)
   {
@@ -510,8 +511,8 @@ void SystemCoreClockUpdate(void)
        /* PLL_VCO = (HSE_VALUE or HSI_VALUE / PLL_M) * PLL_N
          SYSCLK = PLL_VCO / PLL_P
          */    
-      pllsource = (RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC) >> 22;
-      pllm = RCC->PLLCFGR & RCC_PLLCFGR_PLLM;
+      pllsource = (RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC) >> 22;// pllsource == 1 1：选择 HSE 振荡器时钟作为 PLL 和 PLLI2S 时钟输入
+      pllm = RCC->PLLCFGR & RCC_PLLCFGR_PLLM; //pllm分频系数=25，因为晶振时25M
       
 #if defined (STM32F40_41xxx) || defined (STM32F427_437xx) || defined (STM32F429_439xx) || defined (STM32F401xx)
       if (pllsource != 0)
@@ -530,17 +531,23 @@ void SystemCoreClockUpdate(void)
       {
         /* HSE used as PLL clock source */
         pllvco = (HSE_BYPASS_INPUT_FREQUENCY / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
-      }  
+      }
 #else  
       if (pllsource == 0)
       {
         /* HSI used as PLL clock source */
         pllvco = (HSI_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
-      }  
+      }
+      else
+      {
+        /* HSE used as PLL clock source */
+        pllvco = (HSE_VALUE / pllm) * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 6);
+      } 
 #endif /* USE_HSE_BYPASS */  
 #endif /* STM32F40_41xxx || STM32F427_437xx || STM32F429_439xx || STM32F401xx */  
-      pllp = (((RCC->PLLCFGR & RCC_PLLCFGR_PLLP) >>16) + 1 ) *2;
-      SystemCoreClock = pllvco/pllp;      
+      pllp = (((RCC->PLLCFGR & RCC_PLLCFGR_PLLP) >>16) + 1 ) *2;//pllp == 4
+
+      SystemCoreClock = pllvco/pllp;printf("pllvco = %d\n",pllvco);
       break;
     default:
       SystemCoreClock = HSI_VALUE;
@@ -551,6 +558,7 @@ void SystemCoreClockUpdate(void)
   tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];
   /* HCLK frequency */
   SystemCoreClock >>= tmp;
+  printf("SystemCoreClock = %d\n",SystemCoreClock);
 }
 
 /**

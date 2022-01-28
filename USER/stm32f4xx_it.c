@@ -126,24 +126,15 @@ void DebugMon_Handler(void)
 }
 
 /**
-  * @brief  This function handles PendSVC exception.
-  * @param  None
-  * @retval None
-  */
-void PendSV_Handler(void)
-{
-}
-
-/**
   * @brief  This function handles SysTick Handler.
   * @param  None
   * @retval None
   */
- #include <stdio.h>
-void SysTick_Handler(void)
-{
-    printf("-------time on\n");
-}
+
+// void SysTick_Handler(void)
+// {
+//     //printf("-------time on\n");
+// }
 
 /******************************************************************************/
 /*                 STM32F4xx Peripherals Interrupt Handlers                   */

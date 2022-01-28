@@ -41,7 +41,7 @@ void USART1_Config(uint32_t bound)
 	
 	USART_Init(USART1,&USART_InitStructure);
 	
-	USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);
+	//USART_ITConfig(USART1,USART_IT_RXNE,ENABLE);
 	
 	USART_Cmd(USART1,ENABLE);	
 }

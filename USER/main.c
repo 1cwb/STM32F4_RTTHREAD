@@ -4,7 +4,8 @@
 #include "led.h"
 #include "key.h"
 #include "stm32f4xx.h"
-  
+
+extern int thread_test();
 void Delay(__IO uint32_t nCount);
 
 void Delay(__IO uint32_t nCount)
@@ -12,21 +13,21 @@ void Delay(__IO uint32_t nCount)
   while(nCount--){}
 }
 
+
 int main(void)
 {
-
   USART1_Config(115200);
-  KEY_Init();
   LED_init();
   RCC_ClocksTypeDef rcc;
   RCC_GetClocksFreq(&rcc);
-  delay_init(rcc.HCLK_Frequency/1000000);
-  while(1){
-    printf("sys clock is %lu\n",rcc.SYSCLK_Frequency);
+  while(1)
+  {
 		LED1_ON();
-		delay_ms(1000);
+
+    Delay(0xfffff);
 		LED1_OFF();
-		delay_ms(1000);
-	}
+    Delay(0xfffff);
+    printf("test----\n");
+  }
 }
 

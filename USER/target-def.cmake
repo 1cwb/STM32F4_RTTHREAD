@@ -6,7 +6,7 @@ set(MCU_NAME STM32F411CE)
 
 set(CPU "-mcpu=cortex-m4")
 set(FPU "-mfpu=fpv4-sp-d16")
-set(FLOAT_ABI "-mfloat-abi=hard")
+set(FLOAT_ABI "-mfloat-abi=soft")
 
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/${STM32_PROJ_FOLDER}/STM32F411RE_FLASH.ld)
 

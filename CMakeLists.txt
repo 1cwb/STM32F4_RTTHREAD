@@ -50,6 +50,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/SYSTEM)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/HARDWARE)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${STM32_PROJ_FOLDER})
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/RTTHREAD/source)
+
 if(USE_SYSTEM_VIEW)
 add_definitions("-DENABLE_SYSTEMVIEW")
 endif()
