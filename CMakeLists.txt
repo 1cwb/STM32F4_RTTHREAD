@@ -50,7 +50,8 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/SYSTEM)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/HARDWARE)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/${STM32_PROJ_FOLDER})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/RTTHREAD/source)
+#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/rt-thread/src)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/rt-thread/include)
 
 if(USE_SYSTEM_VIEW)
 add_definitions("-DENABLE_SYSTEMVIEW")
@@ -67,7 +68,7 @@ set(ELF_TARGET ${PROJECT_NAME}.elf)
 add_subdirectory(${STM32_CMAKE_DIR}/FWLIB ${CMAKE_BINARY_DIR}/libraries/FWLIB)
 add_subdirectory(${STM32_CMAKE_DIR}/SYSTEM ${CMAKE_BINARY_DIR}/libraries/SYSTEM)
 add_subdirectory(${STM32_CMAKE_DIR}/HARDWARE ${CMAKE_BINARY_DIR}/libraries/HARDWARE)
-
+add_subdirectory(${STM32_CMAKE_DIR}/rt-thread ${CMAKE_BINARY_DIR}/libraries/rt-thread)
 # STM32 USER generated source files
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/USER USER_SRC_FILE)
 file(GLOB ASM_FILE ${CMAKE_CURRENT_SOURCE_DIR}/USER/*.s)
@@ -79,7 +80,7 @@ set(CUBEMX_SRC
 
 add_executable(${ELF_TARGET} ${CUBEMX_SRC})
 target_compile_definitions(${ELF_TARGET} PUBLIC -D${MCU_FAMILY})
-target_link_libraries(${ELF_TARGET} PUBLIC stm32f4xx_lib syslib hwlib -lc -lm -lnosys)
+target_link_libraries(${ELF_TARGET} PUBLIC stm32f4xx_lib syslib hwlib rtthread_nano -lc -lm -lnosys)
 target_link_libraries(${ELF_TARGET} PRIVATE -T${LINKER_SCRIPT} ${EXTRA_LINK_FLAGS})
 target_include_directories(${ELF_TARGET} PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR})

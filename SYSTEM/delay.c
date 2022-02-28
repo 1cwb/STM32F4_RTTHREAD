@@ -1,7 +1,28 @@
 #include "delay.h"
 #include "sys.h"
 #include "stm32f4xx_conf.h"
- 
+
+#if 0
+void rt_hw_us_delay(rt_uint32_t us)
+{
+    rt_uint32_t us_ticks;
+	rt_uint32_t tnow, tcnt = 0;
+    rt_uint32_t told = SysTick->VAL;
+	rt_uint32_t reload = SysTick->LOAD;
+	us_ticks = us * (SystemCoreClock / 1000000UL);
+	/*获取当前时间*/
+	while(RT_TRUE)
+	{
+		tnow = SysTick->VAL;
+        tcnt += told > tnow ? told - tnow : reload - tnow + told;
+		told = tnow;
+		if(tcnt >= us_ticks)
+		{
+			break;
+		}
+	}
+}
+
 static u8  fac_us=0;//us延时倍乘数			   
 static u16 fac_ms=0;//ms延时倍乘数,在ucos下,代表每个节拍的ms数
 
@@ -31,7 +52,7 @@ void delay_init(u8 SYSCLK)
 //nus为要延时的us数.	
 //注意:nus的值,不要大于798915us
 void delay_us(u32 nus)
-{		
+{
 	u32 temp;	    	 
 	SysTick->LOAD=nus*fac_us; //时间加载	  		 
 	SysTick->VAL=0x00;        //清空计数器
@@ -77,9 +98,8 @@ void delay_ms(u16 nms)
 		repeat--;
 	}
 	if(remain)delay_xms(remain);	
-}
-			 
-
+}	 
+#endif
 
 
 

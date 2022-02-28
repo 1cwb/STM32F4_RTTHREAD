@@ -12,4 +12,3 @@ void LED_init(){
   GPIO_Init(GPIOC, &GPIO_InitStructure);
   LED1_OFF();
 }
-

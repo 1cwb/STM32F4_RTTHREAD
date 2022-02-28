@@ -547,7 +547,7 @@ void SystemCoreClockUpdate(void)
 #endif /* STM32F40_41xxx || STM32F427_437xx || STM32F429_439xx || STM32F401xx */  
       pllp = (((RCC->PLLCFGR & RCC_PLLCFGR_PLLP) >>16) + 1 ) *2;//pllp == 4
 
-      SystemCoreClock = pllvco/pllp;printf("pllvco = %d\n",pllvco);
+      SystemCoreClock = pllvco/pllp;
       break;
     default:
       SystemCoreClock = HSI_VALUE;
@@ -558,7 +558,6 @@ void SystemCoreClockUpdate(void)
   tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];
   /* HCLK frequency */
   SystemCoreClock >>= tmp;
-  printf("SystemCoreClock = %d\n",SystemCoreClock);
 }
 
 /**
